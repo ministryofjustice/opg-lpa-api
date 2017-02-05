@@ -6,10 +6,10 @@ nbproject
 .idea
 .project
 .settings
-vendor/bin
 .idea/*
 *.iml
 .sass-cache/*
 node_modules/*
 bower_downloads/*
 local.php.old
+vendor/*
