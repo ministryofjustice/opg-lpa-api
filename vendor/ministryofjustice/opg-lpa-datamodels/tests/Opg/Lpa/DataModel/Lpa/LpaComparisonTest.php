@@ -1,6 +1,8 @@
 <?php
 
-namespace Opg\Lpa\DataModel\Lpa;
+namespace OpgTest\Lpa\DataModel\Lpa;
+
+use Opg\Lpa\DataModel\Lpa\Lpa;
 
 class ComparisonTest extends \PHPUnit_Framework_TestCase
 {
