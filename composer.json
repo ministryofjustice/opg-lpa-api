@@ -14,7 +14,7 @@
         }
     ],
     "require": {
-        "php": ">=5.5.9",
+        "php": ">=7.0.18",
         "zendframework/zendframework": "^2.5",
         "aws/aws-sdk-php": "^3.0",
         "nocarrier/hal": "0.9.10",
