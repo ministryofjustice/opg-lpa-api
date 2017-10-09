@@ -5649,7 +5649,7 @@
             "license": [
                 "BSD-3-Clause"
             ],
-            "description": "a component that aids in manipulating and validating » Uniform Resource Identifiers (URIs)",
+            "description": "a component that aids in manipulating and validating ?? Uniform Resource Identifiers (URIs)",
             "homepage": "https://github.com/zendframework/zend-uri",
             "keywords": [
                 "uri",
@@ -6125,7 +6125,7 @@
                     "email": "jmleroux.pro@gmail.com"
                 },
                 {
-                    "name": "Michaël Gallego",
+                    "name": "Micha??l Gallego",
                     "email": "mic.gallego@gmail.com",
                     "homepage": "http://www.michaelgallego.fr"
                 }
@@ -6234,7 +6234,7 @@
             ],
             "authors": [
                 {
-                    "name": "Michaël Gallego",
+                    "name": "Micha??l Gallego",
                     "email": "mic.gallego@gmail.com",
                     "homepage": "http://michaelgallego.fr"
                 }
@@ -6338,7 +6338,7 @@
             ],
             "authors": [
                 {
-                    "name": "Pádraic Brady",
+                    "name": "P??draic Brady",
                     "email": "padraic.brady@gmail.com",
                     "homepage": "http://blog.astrumfutura.com"
                 },
