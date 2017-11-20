@@ -7,7 +7,6 @@ namespace Composer\Autoload;
 class ComposerStaticInit409970bb818922b230ff267b0f1a52e7
 {
     public static $files = array (
-        '3a37ebac017bc098e9a86b35401e7a68' => __DIR__ . '/..' . '/mongodb/mongodb/src/functions.php',
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
         '3e2471375464aac821502deb0ac64275' => __DIR__ . '/..' . '/symfony/polyfill-php54/bootstrap.php',
         'b067bc7112e384b61c701452d53a14a8' => __DIR__ . '/..' . '/mtdowling/jmespath.php/src/JmesPath.php',
@@ -115,7 +114,6 @@ class ComposerStaticInit409970bb818922b230ff267b0f1a52e7
         'M' => 
         array (
             'Monolog\\' => 8,
-            'MongoDB\\' => 8,
         ),
         'J' => 
         array (
@@ -428,10 +426,6 @@ class ComposerStaticInit409970bb818922b230ff267b0f1a52e7
         'Monolog\\' => 
         array (
             0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
-        ),
-        'MongoDB\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/mongodb/mongodb/src',
         ),
         'JmesPath\\' => 
         array (
