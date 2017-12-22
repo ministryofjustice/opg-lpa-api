@@ -1,12 +1,5 @@
 FROM registry.service.opg.digital/opg-php-fpm-1604
 
-RUN apt-get install -y php-dev pkg-config
-
-# We need latest version of the mongo extension
-RUN pecl install mongodb && \
-    echo "extension=mongodb.so" > /etc/php/7.0/mods-available/mongodb.ini && \
-    phpenmod mongodb
-
 RUN groupadd webservice && \
     groupadd supervisor
 
