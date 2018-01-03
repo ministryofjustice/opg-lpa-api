@@ -26,6 +26,7 @@ class AuthenticationListener
         $authService = $serviceManager->get('AuthenticationService');
 
         $authConfig = $serviceManager->get('Config')['authentication'];
+        $adminConfig = $serviceManager->get('Config')['admin'];
 
         /*
          * Do some authentication. Initially this will will just be via the token passed from front-2.
@@ -57,7 +58,7 @@ class AuthenticationListener
             $logger->info('Authentication attempt - token supplied');
 
             //  Attempt to authenticate - if successful the identity will be persisted for the request
-            $authAdapter = new Adapter\LpaAuth($token, $authConfig['endpoint']);
+            $authAdapter = new Adapter\LpaAuth($token, $authConfig['endpoint'], $adminConfig);
             $result = $authService->authenticate($authAdapter);
 
             if (AuthenticationResult::SUCCESS !== $result->getCode()) {

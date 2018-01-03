@@ -13,6 +13,10 @@ return array(
         'clean-up-token' => getenv('OPG_LPA_COMMON_AUTH_CLEANUP_TOKEN'),
     ],
 
+    'admin' => [
+        'accounts' => getenv('OPG_LPA_COMMON_ADMIN_ACCOUNTS') ? explode(',',getenv('OPG_LPA_COMMON_ADMIN_ACCOUNTS')) : array(),
+    ],
+
     'cron' => [
 
         'lock' => [
