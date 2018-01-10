@@ -2,7 +2,6 @@
 
 namespace Application\Model\Rest;
 
-use Application\DataAccess\Mongo\CollectionFactory;
 use Application\DataAccess\Mongo\DateCallback;
 use Application\Library\Authorization\UnauthorizedException;
 use Application\Library\DateTime;
@@ -13,13 +12,11 @@ use MongoDB\BSON\UTCDateTime;
 use MongoDB\Collection;
 use Opg\Lpa\DataModel\Lpa\Lpa;
 use Opg\Lpa\Logger\LoggerTrait;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use ZfcRbac\Service\AuthorizationServiceAwareInterface;
 use ZfcRbac\Service\AuthorizationServiceAwareTrait;
 use RuntimeException;
 
-abstract class AbstractResource implements ServiceLocatorAwareInterface, AuthorizationServiceAwareInterface
+abstract class AbstractResource implements AuthorizationServiceAwareInterface
 {
     use LoggerTrait;
 
@@ -28,7 +25,6 @@ abstract class AbstractResource implements ServiceLocatorAwareInterface, Authori
 
     //------------------------------------------
 
-    use ServiceLocatorAwareTrait;
     use AuthorizationServiceAwareTrait;
 
     //------------------------------------------
@@ -67,6 +63,27 @@ abstract class AbstractResource implements ServiceLocatorAwareInterface, Authori
      * @var RouteUser
      */
     protected $routeUser = null;
+
+    /**
+     * @var Collection
+     */
+    protected $lpaCollection = null;
+
+    /**
+     * @var Collection
+     */
+    protected $collection = null;
+
+    /**
+     * AbstractResource constructor
+     * @param Collection $lpaCollection
+     * @param Collection $collection
+     */
+    public function __construct(Collection $lpaCollection, Collection $collection = null)
+    {
+        $this->lpaCollection = $lpaCollection;
+        $this->collection = $collection;
+    }
 
     /**
      * @return mixed
@@ -142,16 +159,6 @@ abstract class AbstractResource implements ServiceLocatorAwareInterface, Authori
     //------------------------------------------
 
     /**
-     * @param $collection string Name of the requested collection.
-     * @return Collection
-     */
-    public function getCollection( $collection ){
-        return $this->getServiceLocator()->get( CollectionFactory::class . "-{$collection}" );
-    }
-
-    //------------------------------------------
-
-    /**
      * Helper method for saving an updated LPA.
      *
      * @param Lpa $lpa
@@ -172,12 +179,10 @@ abstract class AbstractResource implements ServiceLocatorAwareInterface, Authori
 
         //--------------------------------------------------------
 
-        $collection = $this->getCollection('lpa');
-
         //--------------------------------------------------------
         // Check LPA in database isn't locked...
 
-        $locked = $collection->count( [ '_id'=>$lpa->id, 'locked'=>true ], [ '_id'=>true ] ) > 0;
+        $locked = $this->lpaCollection->count( [ '_id'=>$lpa->id, 'locked'=>true ], [ '_id'=>true ] ) > 0;
 
         if( $locked === true ){
             throw new LockedException('LPA has already been locked.');
@@ -256,7 +261,7 @@ abstract class AbstractResource implements ServiceLocatorAwareInterface, Authori
         $lastUpdated = new UTCDateTime($lpa->updatedAt);
 
         $existingLpa = new Lpa();
-        $existingLpaResult = $collection->findOne( [ '_id'=>$lpa->id ] );
+        $existingLpaResult = $this->lpaCollection->findOne( [ '_id'=>$lpa->id ] );
         if( !is_null($existingLpaResult) ){
             $existingLpaResult = [ 'id' => $existingLpaResult['_id'] ] + $existingLpaResult;
             $existingLpa = new Lpa( $existingLpaResult );
@@ -275,7 +280,7 @@ abstract class AbstractResource implements ServiceLocatorAwareInterface, Authori
 
         // updatedAt is included in the query so that data isn't overwritten
         // if the Document has changed since this process loaded it.
-        $result = $collection->updateOne(
+        $result = $this->lpaCollection->updateOne(
             [ '_id'=>$lpa->id, 'updatedAt'=>$lastUpdated ],
             ['$set' => array_merge($lpa->toArray(new DateCallback()), ['search' => $searchField])],
             [ 'upsert'=>false, 'multiple'=>false ]
