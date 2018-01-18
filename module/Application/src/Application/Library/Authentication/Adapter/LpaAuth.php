@@ -14,7 +14,7 @@ use Application\Library\Authentication\Identity;
 /**
  * Authentication adapter for Version 2 of the LPA auth service.
  *
- * Class LpaAuthOne
+ * Class LpaAuth
  * @package Application\Library\Authentication\Adapter
  */
 class LpaAuth implements AdapterInterface {
