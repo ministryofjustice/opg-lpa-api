@@ -22,4 +22,7 @@ ADD docker/certificates/* /usr/local/share/ca-certificates/
 ADD docker/bin/update-ca-certificates /usr/sbin/update-ca-certificates
 RUN chmod 755 /usr/sbin/update-ca-certificates; sync; /usr/sbin/update-ca-certificates --verbose
 
+#TODO - extra config to ensure that API self calls work as expected - to be removed after LPA-2740 and LPA-2741
+RUN echo "127.0.0.1 apiv2" >> /etc/hosts
+
 ENV OPG_SERVICE api
