@@ -11,6 +11,8 @@ mongoexport --host=mongodb-01,mongodb-02,mongodb-03 --ssl --sslAllowInvalidCerti
 --fields _id,user,updatedAt,startedAt,createdAt,completedAt,lockedAt,locked,whoAreYouAnswered,seed,repeatCaseNumber,document,payment,metadata,search \
 > applications-dump.csv
 
+rm -f errors.txt
+
 echo "Converting data Mongo -> Postgres"
 php process-applications.php > applications-converted.csv
 
