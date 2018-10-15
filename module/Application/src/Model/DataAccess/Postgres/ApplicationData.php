@@ -776,7 +776,7 @@ class ApplicationData extends AbstractBase implements ApplicationRepository\Appl
             ]);
         } else {
             return $this->countCompletedBetween($start, $end, [
-                new Expression("metadata <@ ?", json_encode([Lpa::CERTIFICATE_PROVIDER_WAS_SKIPPED => true]))
+                new Expression("NOT(metadata @> ?)", json_encode([Lpa::CERTIFICATE_PROVIDER_WAS_SKIPPED => true]))
             ]);
         }
     }
