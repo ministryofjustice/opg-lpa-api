@@ -771,7 +771,7 @@ class ApplicationData extends AbstractBase implements ApplicationRepository\Appl
     public function countCompletedBetweenCertificateProviderSkipped(Datetime $start, Datetime $end, bool $isSkipped) : int
     {
         return $this->countCompletedBetween($start, $end, [
-            new Expression("metadata @> ?", json_encode([Lpa::CERTIFICATE_PROVIDER_WAS_SKIPPED => true]))
+            new Expression("metadata @> ?", json_encode([Lpa::CERTIFICATE_PROVIDER_WAS_SKIPPED => $isSkipped]))
         ]);
     }
 
