@@ -39,7 +39,7 @@ class GenerateStatsController extends AbstractConsoleController
         $lockName = 'GenerateApiStats';
 
         // Attempt to get the cron lock...
-        if ($this->cronLock->getLock($lockName, (60 * 60))) {
+        if ($this->cronLock->getLock($lockName, (60 * 5))) {
             echo "Got the GenerateApiStats lock.\n";
 
             $this->getLogger()->info("This node got the GenerateApiStats cron lock for {$lockName}");
