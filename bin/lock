@@ -8,13 +8,15 @@ use Aws\DynamoDb\Exception\DynamoDbException;
 
 /**
  * Options:
- *      --name:     Lock name within the table.
- *      --table:    DynamoDB table name.
- *      --ttl:      Time to hold the lock for.
+ *      --name:         Lock name within the table.
+ *      --table:        DynamoDB table name.
+ *      --ttl:          Time to hold the lock for.
  *
- *      --endpoint: The DynamoDB endpoint to use. Defaults to none.
- *      --version:  The endpoint version to use. Defaults to 2012-08-10.
- *      --region:   AWS region the table is in. Defaults to eu-west-1.
+ *      --endpoint:     The DynamoDB endpoint to use. Defaults to none.
+ *      --version:      The endpoint version to use. Defaults to 2012-08-10.
+ *      --region:       AWS region the table is in. Defaults to eu-west-1.
+ *      --awsKey:       AWS access key. Defaults to null.
+ *      --awsSecret:    AWS access secret. Defaults to null.
  */
 
 $cmd = new Commando\Command();
@@ -49,13 +51,32 @@ $cmd->option('region')
     ->describedAs('AWS region. Default to eu-west-1')
     ->defaultsTo('eu-west-1');
 
+$cmd->option('awsKey')
+    ->describedAs('AWS access key.')
+    ->defaultsTo(null);
+
+$cmd->option('awsSecret')
+    ->describedAs('AWS access secret.')
+    ->defaultsTo(null);
+
 //----------------------------------
 
-$dynamoDb = new DynamoDbClient([
+//  Construct the dynamo config
+$dynamoDbConfig = [
     'endpoint' => $cmd['endpoint'] ?: null,
     'version' => $cmd['version'],
     'region' => $cmd['region'],
-]);
+];
+
+//  If credentials have been provided add them now
+if (!is_null($cmd['awsKey']) && !is_null($cmd['awsSecret'])) {
+    $dynamoDbConfig['credentials'] = [
+        'key'    => $cmd['awsKey'],
+        'secret' => $cmd['awsSecret'],
+    ];
+}
+
+$dynamoDb = new DynamoDbClient($dynamoDbConfig);
 
 // Current time in milliseconds
 $time = round(microtime(true) * 1000);

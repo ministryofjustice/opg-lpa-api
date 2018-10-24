@@ -41,12 +41,23 @@ class DynamoCronLock
     {
         //  Create the command to execute
         $command = 'bin/lock acquire ';
-        $command .= sprintf('--table %s ', $this->config['settings']['table_name']);
         $command .= sprintf('--name "%s/%s" ', $this->keyPrefix, $lockName);
+        $command .= sprintf('--table %s ', $this->config['settings']['table_name']);
         $command .= sprintf('--ttl %s ', $allowedSecondsSinceLastRun);
-        $command .= sprintf('--endpoint %s ', $this->config['client']['endpoint']);
-        $command .= sprintf('--version %s ', $this->config['client']['version']);
-        $command .= sprintf('--region %s ', $this->config['client']['region']);
+
+        if (isset($this->config['client']['version'])) {
+            $command .= sprintf('--version %s ', $this->config['client']['version']);
+        }
+
+        if (isset($this->config['client']['region'])) {
+            $command .= sprintf('--region %s ', $this->config['client']['region']);
+        }
+
+        //  Add credentials if they are present
+        if (isset($this->config['client']['credentials']['key']) && isset($this->config['client']['credentials']['secret'])) {
+            $command .= sprintf('--awsKey %s ', $this->config['client']['credentials']['key']);
+            $command .= sprintf('--awsSecret %s ', $this->config['client']['credentials']['credentials']);
+        }
 
         //  Initialise the return value
         $output = [];
