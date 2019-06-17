@@ -86,6 +86,7 @@ RUN apk add --no-cache php7-bcmath
 
 RUN addgroup webservice && \
   addgroup supervisor
+RUN addgroup -S app && adduser -S app -G app
 
 # Add application logging config(s)
 ADD docker/beaver.d /etc/beaver.d
