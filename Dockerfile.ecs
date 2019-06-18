@@ -42,14 +42,11 @@ EXPOSE 443
 
 # what opg-nginx-1604 used to do...
 ENV OPG_NGINX_SERVER_NAMES="localhost"
-# RUN echo "Setup nginx user and dirs" &&\
-#   adduser -S nginx -G nginx &&\
-#   getent group | grep nginx && \
 #   # ln -s /etc/sv/nginx /etc/service/ &&\
-#   mkdir -p /var/log/nginx /var/lib/nginx/body \
-#   /app/public /etc/nginx/app.conf.d &&\
-#   chown nginx:nginx /var/log/nginx &&\
-#   echo "Hello World from opguk/nginx" > /app/public/index.html
+RUN mkdir -p /var/log/nginx /var/lib/nginx/body \
+  /app/public /etc/nginx/app.conf.d &&\
+  chown nginx:nginx /var/log/nginx &&\
+  echo "Hello World from opguk/nginx" > /app/public/index.html
 
 ## Route NGINX logs to stdout/stderr
 RUN ln -sf /dev/stdout /var/log/nginx/access.log \
