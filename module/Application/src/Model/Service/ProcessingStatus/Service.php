@@ -74,6 +74,7 @@ class Service extends AbstractService
         // build request loop
         $requests = [];
         $successStatus = [];
+        $rejectedDate = [];
 
         $provider = CredentialProvider::defaultProvider();
         $credentials = $provider()->wait();
@@ -102,7 +103,6 @@ class Service extends AbstractService
             'fulfilled' => function ($response, $id) use (&$results) {
                 // Each successful response
                 $this->getLogger()->debug('We have a result for:' . $id);
-
                 $results[$id] = $response;
                 },
             'rejected' => function ($reason, $id){
@@ -122,6 +122,10 @@ class Service extends AbstractService
                 case 200:
                     $status = $this->handleResponse($result);
                     $successStatus[$lpaId] = $status;
+
+                    $date = $this->handleRejectedDate($result);
+                    $rejectedDate[$lpaId] = $date;
+
                     break;
 
                 case 404:
@@ -136,7 +140,7 @@ class Service extends AbstractService
             } //end switch
         } //end for
 
-        return $successStatus;
+        return [$successStatus,$rejectedDate];
     }
 
     /**
@@ -171,5 +175,24 @@ class Service extends AbstractService
                 return null;
             }
             return self::SIRIUS_STATUS_TO_LPA[$status['status']];
+    }
+
+    private function handleRejectedDate(ResponseInterface $result)
+    {
+        $responseBody = json_decode($result->getBody(), true);
+
+        if (is_null($responseBody)){
+            return null;
+        }
+
+        //  If the body isn't an array now then it wasn't JSON before
+        if (!is_array($responseBody)) {
+            throw new ApiProblemException($result, 'Malformed JSON response from server');
+        }
+
+        if (!$responseBody['rejectedDate']) {
+            return null;
+        }
+        return $responseBody['rejectedDate'];
     }
 }
