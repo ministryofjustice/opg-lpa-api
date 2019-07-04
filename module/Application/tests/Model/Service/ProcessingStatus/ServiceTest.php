@@ -54,13 +54,13 @@ class ServiceTest extends MockeryTestCase
     }
 
     public function setUpRequest($returnStatus = 200,
-        $returnBody = '{"status": "Pending"}')
+        $returnBody = '{"status": "Pending","rejectedDate": null}')
     {
         $this->response = Mockery::mock(ResponseInterface::class);
         $this->response->shouldReceive('getStatusCode')->once()->andReturn($returnStatus);
 
         if ($returnBody != null) {
-            $this->response->shouldReceive('getBody')->once()->andReturn($returnBody);
+            $this->response->shouldReceive('getBody')->andReturn($returnBody);
         }
 
         $this->httpClient->shouldReceive('sendAsync')
@@ -77,9 +77,10 @@ class ServiceTest extends MockeryTestCase
         $this->setUpSigning();
         $this->setUpRequest();
 
-        $result = $this->service->getStatuses([1000000000]);
+        list($statusResult,$rejectedDateResult) = $this->service->getStatuses([1000000000]);
 
-        $this->assertEquals([1000000000 => "Received"], $result);
+        $this->assertEquals([1000000000 => "Received"], $statusResult);
+        $this->assertEquals([1000000000 => null], $rejectedDateResult);
     }
 
     /**
@@ -92,9 +93,9 @@ class ServiceTest extends MockeryTestCase
         $this->setUpRequest();
         $this->setUpRequest();
 
-        $result = $this->service->getStatuses([1000000000,1000000001]);
+        list($statusResult,$rejectedDateResult) = $this->service->getStatuses([1000000000,1000000001]);
 
-        $this->assertEquals([1000000000 => "Received", 1000000001 => "Received"], $result);
+        $this->assertEquals([1000000000 => "Received", 1000000001 => "Received"], $statusResult);
     }
 
     /**
@@ -121,8 +122,8 @@ class ServiceTest extends MockeryTestCase
 
         $this->setUpRequest(404, null);
 
-        $result = $this->service->getStatuses([1000000000]);
+        list($statusResultArray, $rejectedDateArray)  = $this->service->getStatuses([1000000000]);
 
-        $this->assertEquals([1000000000 => null], $result);
+        $this->assertEquals([1000000000 => null], $statusResultArray);
     }
 }
