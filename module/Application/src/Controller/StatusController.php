@@ -100,9 +100,7 @@ class StatusController extends AbstractRestfulController
             return new ApiProblemResponse(new ApiProblem(403, 'LPA has been locked'));
         }
     }
-
-
-
+    
     public function getCurrentProcessingStatus($id)
     {
         $lpaResult = $this->getService()->fetch($id, $this->routeUserId);
@@ -133,7 +131,6 @@ class StatusController extends AbstractRestfulController
         $lpa = $lpaResult->getData();
         $metaData = $lpa->getMetaData();
 
-        //$applicationRejectedDate = $metaData['application-rejected-date'];
         $applicationRejectedDate = array_key_exists(LPA::APPLICATION_REJECTED_DATE, $metaData) ?
             $metaData[LPA::APPLICATION_REJECTED_DATE] : null;
 
@@ -159,7 +156,6 @@ class StatusController extends AbstractRestfulController
         $metaData[LPA::APPLICATION_REJECTED_DATE] = $rejectedDate;
 
         $this->getService()->patch(['metadata' => $metaData], $lpaId, $this->routeUserId);
-       // $this->getService()->patch(['metadata' => [["sirius-processing-status"] =>  "Returned", ["application-rejected-date"]=> NULL]
 
     }
 
