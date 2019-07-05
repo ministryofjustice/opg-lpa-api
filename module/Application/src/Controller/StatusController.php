@@ -128,8 +128,7 @@ class StatusController extends AbstractRestfulController
             return $lpaResult;
         }
         /** @var Lpa $lpa */
-        $lpa = $lpaResult->getData();
-        $metaData = $lpa->getMetaData();
+        $metaData = $lpaResult->getData()->getMetaData();
 
         $applicationRejectedDate = array_key_exists(LPA::APPLICATION_REJECTED_DATE, $metaData) ?
             $metaData[LPA::APPLICATION_REJECTED_DATE] : null;
