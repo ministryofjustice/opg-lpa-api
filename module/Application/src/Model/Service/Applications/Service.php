@@ -87,7 +87,6 @@ class Service extends AbstractService
      */
     public function patch($data, $id, $userId)
     {
-
         /** @var Lpa $lpa */
         $lpa = $this->fetch($id, $userId)->getData();
 
