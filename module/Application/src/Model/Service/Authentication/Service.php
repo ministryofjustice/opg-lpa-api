@@ -21,7 +21,8 @@ class Service extends AbstractService
     /**
      * The number of seconds before an auth token expires.
      */
-    const TOKEN_TTL = 4500; // 75 minutes
+    // const TOKEN_TTL = 4500; // 75 minutes
+    const TOKEN_TTL = 600; // 10 minutes
 
     /**
      * The number of minutes to lock an account for after x failed login consecutive attempts.
