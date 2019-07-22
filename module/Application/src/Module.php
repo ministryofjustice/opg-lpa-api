@@ -11,7 +11,6 @@ use Application\Library\ApiProblem\ApiProblem;
 use Application\Library\ApiProblem\ApiProblemExceptionInterface;
 use Application\Library\Authentication\AuthenticationListener;
 use Alphagov\Notifications\Client as NotifyClient;
-use Aws\Sns\SnsClient;
 use Aws\S3\S3Client;
 use Aws\Sqs\SqsClient;
 use Aws\Signature\SignatureV4;
@@ -72,12 +71,6 @@ class Module
                         'apiKey' => $config['notify']['api']['key'],
                         'httpClient' => $sm->get(HttpClient::class)
                     ]);
-                },
-
-                'SnsClient' => function (ServiceLocatorInterface $sm) {
-                    $config = $sm->get('Config')['log']['sns'];
-
-                    return new SnsClient($config['client']);
                 },
 
                 'ZendDbAdapter' => function (ServiceLocatorInterface $sm) {
