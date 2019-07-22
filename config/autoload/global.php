@@ -13,7 +13,6 @@ return [
         ],
     ],
 
-
     'admin' => [
         'dynamodb' => [
             'client' => [
