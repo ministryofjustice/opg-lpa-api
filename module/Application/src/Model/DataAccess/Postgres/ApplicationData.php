@@ -389,6 +389,66 @@ class ApplicationData extends AbstractBase implements ApplicationRepository\Appl
         ]);
     }
 
+    //SSM 3276
+    /**
+     * Count the number of LPAs waiting for a given LPA type
+     *
+     * @param $lpaType
+     * @return int
+     */
+    public function countWaitingForType(string $lpaType) : int
+    {
+        return $this->count([
+            new IsNotNull('completedAt'),
+            new Expression("metadata ->> 'sirius-processing-status' = ?", Lpa::SIRIUS_PROCESSING_STATUS_CHECKING),
+            new Expression("document ->> 'type' = ?", $lpaType),
+        ]);
+    }
+    /**
+     * Count the number of LPAs being checked for a given LPA type
+     *
+     * @param $lpaType
+     * @return int
+     */
+    public function countCheckingForType(string $lpaType) : int
+    {
+        return $this->count([
+            new IsNotNull('completedAt'),
+            new Expression("metadata ->> 'sirius-processing-status' = ?", Lpa::SIRIUS_PROCESSING_STATUS_CHECKING),
+            new Expression("document ->> 'type' = ?", $lpaType),
+        ]);
+    }
+    /**
+     * Count the number of LPAs received for a given LPA type
+     *
+     * @param $lpaType
+     * @return int
+     */
+    public function countReceivedForType(string $lpaType) : int
+    {
+        return $this->count([
+            new IsNotNull('completedAt'),
+            new Expression("metadata ->> 'sirius-processing-status' = ?", Lpa::SIRIUS_PROCESSING_STATUS_RECEIVED),
+            new Expression("document ->> 'type' = ?", $lpaType),
+        ]);
+    }
+
+    /**
+     * Count the number of LPAs returned for a given LPA type
+     *
+     * @param $lpaType
+     * @return int
+     */
+    public function countReturnedForType(string $lpaType) : int
+    {
+        return $this->count([
+            new IsNotNull('completedAt'),
+            new Expression("metadata ->> 'sirius-processing-status' = ?", Lpa::SIRIUS_PROCESSING_STATUS_RETURNED),
+            new Expression("document ->> 'type' = ?", $lpaType),
+        ]);
+    }
+//
+
     /**
      * Count the number of LPAs completed for a given LPA type
      *
