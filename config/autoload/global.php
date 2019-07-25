@@ -13,20 +13,6 @@ return [
         ],
     ],
 
-    'log' => [
-        'sns' => [
-            'endpoints' => [
-                'major' => getenv('OPG_LPA_COMMON_LOGGING_SNS_ENDPOINTS_MAJOR') ?: null,
-                'minor' => getenv('OPG_LPA_COMMON_LOGGING_SNS_ENDPOINTS_MINOR') ?: null,
-                'info' => getenv('OPG_LPA_COMMON_LOGGING_SNS_ENDPOINTS_INFO') ?: null,
-            ],
-            'client' => [
-                'version' => '2010-03-31',
-                'region' => 'eu-west-1',
-            ],
-        ], // sns
-    ], // log
-
     'admin' => [
         'dynamodb' => [
             'client' => [
