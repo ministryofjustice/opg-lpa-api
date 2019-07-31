@@ -24,7 +24,8 @@ class DataFactory implements FactoryInterface
         //---
 
         return new $requestedName(
-            $container->get('ZendDbAdapter')
+            $container->get('ZendDbAdapter'),
+            $container->get('Config')
         );
     }
 }

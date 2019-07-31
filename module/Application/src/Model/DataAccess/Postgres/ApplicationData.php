@@ -389,7 +389,6 @@ class ApplicationData extends AbstractBase implements ApplicationRepository\Appl
         ]);
     }
 
-    //SSM 3276
     /**
      * Count the number of LPAs waiting for a given LPA type
      *
@@ -398,12 +397,33 @@ class ApplicationData extends AbstractBase implements ApplicationRepository\Appl
      */
     public function countWaitingForType(string $lpaType) : int
     {
+
+        $trackFromDate = new DateTime($this->config()['processing-status']['track-from-date']);
+
         return $this->count([
-            new IsNotNull('completedAt'),
-            new Expression("metadata ->> 'sirius-processing-status' = ?", Lpa::SIRIUS_PROCESSING_STATUS_CHECKING),
+             new IsNotNull('completedAt'),
+            new Operator('completedAt', Operator::OPERATOR_GREATER_THAN_OR_EQUAL_TO, $trackFromDate->format('c')),
             new Expression("document ->> 'type' = ?", $lpaType),
         ]);
     }
+
+    /**
+     * Count the number of LPAs completed for a given LPA type
+     *
+     * @param $lpaType
+     * @return int
+     */
+    public function countCompletedForType(string $lpaType) : int
+    {
+        $trackFromDate = new DateTime($this->config()['processing-status']['track-from-date']);
+
+        return $this->count([
+            new IsNotNull('completedAt'),
+            new Operator('completedAt', Operator::OPERATOR_LESS_THAN_OR_EQUAL_TO, $trackFromDate->format('c')),
+            new Expression("document ->> 'type' = ?", $lpaType),
+        ]);
+    }
+
     /**
      * Count the number of LPAs being checked for a given LPA type
      *
@@ -444,18 +464,18 @@ class ApplicationData extends AbstractBase implements ApplicationRepository\Appl
         return $this->count([
             new IsNotNull('completedAt'),
             new Expression("metadata ->> 'sirius-processing-status' = ?", Lpa::SIRIUS_PROCESSING_STATUS_RETURNED),
+            new Expression("metadata ->> 'application-rejected-date' IS NOT NULL"),
             new Expression("document ->> 'type' = ?", $lpaType),
         ]);
     }
-//
 
     /**
-     * Count the number of LPAs completed for a given LPA type
+     * Count the total number of LPAs  for a given LPA type
      *
      * @param $lpaType
      * @return int
      */
-    public function countCompletedForType(string $lpaType) : int
+    public function countTotalForType(string $lpaType) : int
     {
         return $this->count([
             new IsNotNull('completedAt'),

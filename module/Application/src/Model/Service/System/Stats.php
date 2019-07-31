@@ -162,7 +162,6 @@ class Stats extends AbstractService
         // Created if we have a createdAt, but no completedAt...
         $summary['created'] = $pf['created'] = $this->getApplicationRepository()->countCreatedForType(Document::LPA_TYPE_PF);
 
-//      ssm 3276
         // Count all the LPAs that have been received
         $summary['waiting'] = $pf['waiting'] = $this->getApplicationRepository()->countWaitingForType(Document::LPA_TYPE_PF);
 
@@ -174,7 +173,10 @@ class Stats extends AbstractService
 
         // Count all the LPAs that have been returned
         $summary['returned'] = $pf['returned'] = $this->getApplicationRepository()->countReturnedForType(Document::LPA_TYPE_PF);
-//
+
+        // Count total of all the LPAs
+        $summary['total'] = $pf['total'] = $this->getApplicationRepository()->countTotalForType(Document::LPA_TYPE_PF);
+
         // Count all the LPAs that have a completedAt...
         $summary['completed'] = $pf['completed'] = $this->getApplicationRepository()->countCompletedForType(Document::LPA_TYPE_PF);
 
@@ -186,7 +188,6 @@ class Stats extends AbstractService
         // Created if we have a createdAt, but no completedAt...
         $summary['created'] += $hw['created'] = $this->getApplicationRepository()->countCreatedForType(Document::LPA_TYPE_HW);
 
-//      ssm 3276
         // Count all the LPAs that have been received
         $summary['waiting'] += $hw['waiting'] = $this->getApplicationRepository()->countWaitingForType(Document::LPA_TYPE_HW);
 
@@ -199,7 +200,9 @@ class Stats extends AbstractService
         // Count all the LPAs that have been returned
         $summary['returned'] += $hw['returned'] = $this->getApplicationRepository()->countReturnedForType(Document::LPA_TYPE_HW);
 
-//
+        // Count total of all the LPAs
+        $summary['total'] += $hw['total'] = $this->getApplicationRepository()->countTotalForType(Document::LPA_TYPE_HW);
+
         // Count all the LPAs that have a completedAt...
         $summary['completed'] += $hw['completed'] = $this->getApplicationRepository()->countCompletedForType(Document::LPA_TYPE_HW);
 

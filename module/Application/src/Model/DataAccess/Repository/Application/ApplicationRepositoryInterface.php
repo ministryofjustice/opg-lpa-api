@@ -92,8 +92,6 @@ interface ApplicationRepositoryInterface {
      */
     public function countCreatedForType(string $lpaType) : int;
 
-//    SSM 3276
-
     /**
      * Count the number of LPAs waiting for a given LPA type
      *
@@ -125,7 +123,14 @@ interface ApplicationRepositoryInterface {
      * @return int
      */
     public function countReturnedForType(string $lpaType) : int;
-//    SSM 3276
+
+    /**
+     * Count the total number of LPAs for a given LPA type
+     *
+     * @param $lpaType
+     * @return int
+     */
+    public function countTotalForType(string $lpaType) : int;
 
     /**
      * Count the number of LPAs completed for a given LPA type
