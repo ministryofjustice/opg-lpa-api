@@ -183,9 +183,6 @@ class StatusController extends AbstractRestfulController
 
         foreach ($exploded_ids as $id) {
             $currentProcessingStatus = $this->getCurrentProcessingStatus($id);
-
-           // $this->getLogger()->debug("I am here...." .$id .$currentProcessingStatus);
-
             $rejectedDate = $this->getApplicationRejectedDate($id);
 
             if ($currentProcessingStatus instanceof ApiProblem) {
@@ -215,6 +212,7 @@ class StatusController extends AbstractRestfulController
             $this->getLogger()->debug('Ids to check in Sirius :' . var_export($idsToCheckInSirius, true));
             $siriusResponseArray = $this->processingStatusService->getStatuses($idsToCheckInSirius);
 
+            if (!empty($siriusResponseArray))
             {
                 // updates the results for the status received back from Sirius
                 foreach ($siriusResponseArray as $lpaId => $lpaDetail)
