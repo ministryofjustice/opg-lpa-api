@@ -324,4 +324,13 @@ interface ApplicationRepositoryInterface {
      */
     public function countCompletedBetweenCertificateProviderSkipped(Datetime $start, Datetime $end, bool $isSkipped) : int;
 
+    /**
+     * Get the number of returned LPAs
+     *
+     * @param Datetime $start
+     * @param Datetime $end
+     * @return int
+     */
+    public function countReturnedBetween(Datetime $start, Datetime $end) : int;
+
 }

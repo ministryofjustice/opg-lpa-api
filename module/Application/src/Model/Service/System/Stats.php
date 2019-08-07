@@ -144,6 +144,9 @@ class Stats extends AbstractService
             // Count all the LPAs that have a completedAt...
             $month['completed'] = $this->getApplicationRepository()->countBetween($start, $end, 'completedAt');
 
+            // Count all the LPAs that have rejected date...
+            $month['returned'] = $this->getApplicationRepository()->countReturnedBetween($start, $end);
+
             $byMonth[date('Y-m', $start->getTimestamp())] = $month;
 
             // Modify dates, going back on month...

@@ -169,6 +169,12 @@ class Service extends AbstractService
 
         $return = [];
 
+        if (isset($responseBody['registrationDate'])){
+            $return['registrationDate'] = $responseBody['registrationDate'];
+        }
+        if (isset($responseBody['receiptDate'])){
+            $return['receiptDate'] = $responseBody['receiptDate'];
+        }
         if (isset($responseBody['rejectedDate'])){
             $return['rejectedDate'] = $responseBody['rejectedDate'];
         }
