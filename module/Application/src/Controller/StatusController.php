@@ -138,7 +138,6 @@ class StatusController extends AbstractRestfulController
 
     private function updateMetadata($lpaId, $lpaStatus, $receiptDate = null, $registrationDate = null, $rejectedDate = null)
     {
-
         $lpaResult = $this->getService()->fetch($lpaId, $this->routeUserId);
 
         if ($lpaResult instanceof ApiProblem) {
@@ -157,7 +156,6 @@ class StatusController extends AbstractRestfulController
         $metaData[LPA::APPLICATION_REJECTED_DATE] = $rejectedDate;
 
         $this->getService()->patch(['metadata' => $metaData], $lpaId, $this->routeUserId);
-
     }
 
     /**
@@ -184,6 +182,7 @@ class StatusController extends AbstractRestfulController
         $idsToCheckInSirius = [];
 
         foreach ($exploded_ids as $id) {
+
             $currentProcessingStatus = $this->getCurrentProcessingStatus($id);
             $rejectedDate = $this->getApplicationRejectedDate($id);
 
@@ -214,6 +213,8 @@ class StatusController extends AbstractRestfulController
             $this->getLogger()->debug('Ids to check in Sirius :' . var_export($idsToCheckInSirius, true));
             $siriusResponseArray = $this->processingStatusService->getStatuses($idsToCheckInSirius);
 
+            $this->getLogger()->debug(' Sirius response...... :' . var_export($siriusResponseArray, true));
+
             if (!empty($siriusResponseArray))
             {
                 // updates the results for the status received back from Sirius
@@ -229,34 +230,65 @@ class StatusController extends AbstractRestfulController
                         $registrationDate = isset($lpaDetail['registrationDate']) ? $lpaDetail['registrationDate'] : null;
                         $rejectDate = isset($lpaDetail['rejectedDate']) ? $lpaDetail['rejectedDate'] : null;
 
-                        // If it doesn't match what we already have update the database
-                        if ((!is_null($lpaDetail['status']) && $lpaDetail['status'] != $currentProcessingStatus) || !is_null($receiptDate)) {
-                            $this->updateMetadata($lpaId, $lpaDetail['status'],$receiptDate,$registrationDate,$rejectDate);
-                            $results[$lpaId] = ['found' => true, 'status' => $lpaDetail['status'], 'receiptDate' => $receiptDate];
-                        }
-                        elseif ((!is_null($lpaDetail['status']) && $lpaDetail['status'] != $currentProcessingStatus) || !is_null($registrationDate)) {
-                            $this->updateMetadata($lpaId, $lpaDetail['status'],$receiptDate,$registrationDate,$rejectDate);
-                            $results[$lpaId] = ['found' => true, 'status' => $lpaDetail['status'], 'receiptDate' => $registrationDate];
-                        }
-                        elseif ((!is_null($lpaDetail['status']) && $lpaDetail['status'] != $currentProcessingStatus) || !is_null($rejectDate)) {
-                            $this->updateMetadata($lpaId, $lpaDetail['status'],$receiptDate,$registrationDate,$rejectDate);
+                        if (!is_null($lpaDetail['status']) && $lpaDetail['status']){
 
-                            $results[$lpaId] = ['found' => true, 'status' => $lpaDetail['status'], 'rejectedDate' => $rejectDate];
+                            $this->updateMetadata($lpaId, $lpaDetail['status'],$receiptDate,$registrationDate,$rejectDate);
+                            $results[$lpaId] = ['found' => true, 'status' => $lpaDetail['status'], 'receiptDate' => $receiptDate, 'registrationDate' => $registrationDate, 'rejectedDate' => $rejectDate];
+
                         }
                         else if (!is_null($lpaDetail['status']) && $lpaDetail['status'] == $currentProcessingStatus){
-                            $results[$lpaId] = ['found' => true, 'status' => $currentProcessingStatus, 'rejectedDate' => $rejectDate];
+
+                            $results[$lpaId] = ['found' => true, 'status' => $currentProcessingStatus,'receiptDate' => $receiptDate, 'registrationDate' => $registrationDate, 'rejectedDate' => $rejectDate];
                         }
                         else if(is_null($lpaDetail['status']) && !is_null($currentProcessingStatus) && is_null($rejectDate)){
+
                             $results[$lpaId] = ['found' => true, 'status' => $currentProcessingStatus, 'rejectedDate' => null];
                         }
                         else{
                             $results[$lpaId] = ['found' => false];
                         }
+
+                        // If it doesn't match what we already have update the database
+//                        if ((!is_null($lpaDetail['status']) && $lpaDetail['status'] != $currentProcessingStatus) && !is_null($receiptDate)) {
+//
+//                            $this->updateMetadata($lpaId, $lpaDetail['status'],$receiptDate,$registrationDate,$rejectDate);
+//                            $results[$lpaId] = ['found' => true, 'status' => $lpaDetail['status'], 'receiptDate' => $receiptDate];
+//                        }
+//                        elseif ((!is_null($lpaDetail['status']) && $lpaDetail['status'] != $currentProcessingStatus) && !is_null($registrationDate)) {
+//
+//                            $this->updateMetadata($lpaId, $lpaDetail['status'],$receiptDate,$registrationDate,$rejectDate);
+//                            $results[$lpaId] = ['found' => true, 'status' => $lpaDetail['status'], 'registrationDate' => $registrationDate];
+//                        }
+//                        elseif ((!is_null($lpaDetail['status']) && $lpaDetail['status'] != $currentProcessingStatus) && !is_null($rejectDate)) {
+//
+//                            $this->updateMetadata($lpaId, $lpaDetail['status'],$receiptDate,$registrationDate,$rejectDate);
+//                            $results[$lpaId] = ['found' => true, 'status' => $lpaDetail['status'], 'rejectedDate' => $rejectDate];
+//
+//                        }
+//                        elseif ((!is_null($lpaDetail['status']) && $lpaDetail['status'] == $currentProcessingStatus)
+//                            || !is_null($receiptDate) || !is_null($registrationDate) ||  !is_null($rejectDate)) {
+//
+//                            $this->updateMetadata($lpaId, $lpaDetail['status'],$receiptDate,$registrationDate,$rejectDate);
+//                            $results[$lpaId] = ['found' => true, 'status' => $lpaDetail['status'], 'receiptDate' => $receiptDate, 'registrationDate' => $registrationDate, 'rejectedDate' => $rejectDate];
+//
+//                        }
+//                        else if (!is_null($lpaDetail['status']) && $lpaDetail['status'] == $currentProcessingStatus){
+//
+//                            $results[$lpaId] = ['found' => true, 'status' => $currentProcessingStatus,'receiptDate' => $receiptDate, 'registrationDate' => $registrationDate, 'rejectedDate' => $rejectDate];
+//                        }
+//                        else if(is_null($lpaDetail['status']) && !is_null($currentProcessingStatus) && is_null($rejectDate)){
+//
+//                            $results[$lpaId] = ['found' => true, 'status' => $currentProcessingStatus, 'rejectedDate' => null];
+//                        }
+//                        else{
+//                            $results[$lpaId] = ['found' => false];
+//                        }
                     }
 
                 }
             }
         }
+
         return new Json($results);
     }
 }
