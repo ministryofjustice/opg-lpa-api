@@ -41,14 +41,6 @@ class ServiceTest extends AbstractServiceTest
                 'key' => 'DUMMYKEY',
             ],
         ],
-        'log' => [
-            'sns' => [
-                'endpoints' => [
-                    'info' => 'info_endpoint',
-                ],
-                'client' => []
-            ]
-        ],
         'admin' => [
             'account_cleanup_notification_recipients' => [
                 'test1@example.com',

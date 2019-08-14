@@ -18,11 +18,11 @@ use Application\Model\Service\Users\Service as UsersService;
 use Application\Model\Service\ProcessingStatus\Service as ProcessingStatusService;
 use Aws\S3\S3Client;
 use Aws\Sqs\SqsClient;
-use Http\Client\HttpClient;
 use Interop\Container\ContainerInterface;
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery\MockInterface;
+use GuzzleHttp\Client as guzzleHttpClient;
 
 class ServiceAbstractFactoryTest extends MockeryTestCase
 {
@@ -87,7 +87,7 @@ class ServiceAbstractFactoryTest extends MockeryTestCase
             ],
             [ProcessingStatusService::class,
                 [
-                    HttpClient::class => Mockery::mock(HttpClient::class),
+                    guzzleHttpClient::class => Mockery::mock(guzzleHttpClient::class),
                     'config' => ['processing-status' => ['endpoint' => 'test endpoint']],
                     'AwsApiGatewaySignature' => Mockery::mock(\Aws\Signature\SignatureV4::class),
                 ]

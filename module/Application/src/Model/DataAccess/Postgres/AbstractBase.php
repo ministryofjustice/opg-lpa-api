@@ -16,12 +16,19 @@ class AbstractBase {
     private $adapter;
 
     /**
+     * @var array
+     */
+    private $config;
+
+    /**
      * AbstractBase constructor.
      * @param ZendDbAdapter $adapter
+     * @param array $config
      */
-    public final function __construct(ZendDbAdapter $adapter)
+    public final function __construct(ZendDbAdapter $adapter, array $config)
     {
         $this->adapter = $adapter;
+        $this->config = $config;
     }
 
     /**
@@ -32,4 +39,12 @@ class AbstractBase {
         return $this->adapter;
     }
 
+    /**
+     * Returns the global config.
+     * @return array
+     */
+    protected function config(): array
+    {
+        return $this->config;
+    }
 }
