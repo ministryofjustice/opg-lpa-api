@@ -214,8 +214,6 @@ class StatusController extends AbstractRestfulController
             $this->getLogger()->debug('Ids to check in Sirius :' . var_export($idsToCheckInSirius, true));
             $siriusResponseArray = $this->processingStatusService->getStatuses($idsToCheckInSirius);
 
-            $this->getLogger()->debug(' Sirius response...... :' . var_export($siriusResponseArray, true));
-
             if (!empty($siriusResponseArray))
             {
                 // updates the results for the status received back from Sirius

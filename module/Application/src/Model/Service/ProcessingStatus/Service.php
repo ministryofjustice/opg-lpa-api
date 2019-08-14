@@ -135,8 +135,6 @@ class Service extends AbstractService
                     throw new ApiProblemException('Unexpected response from Sirius gateway: ' . $statusCode);
             } //end switch
         } //end for
-
-
         return $siriusResponseArray;
     }
 
@@ -181,7 +179,6 @@ class Service extends AbstractService
         }
         if (isset($responseBody['status'])) {
             $return['status'] = self::SIRIUS_STATUS_TO_LPA[$responseBody['status']];
-
         }
 
         return $return;
